@@ -14,8 +14,11 @@ let
 
   isIntel = isVideoDriver "intel";
   isNotIntel = !isIntel;
+
+  theme = if config.nix-desktop.theme.dark then "dark" else "light";
 in
 {
   inherit isHeadless isNotHeadless isGnome;
   inherit isNvidia isNotNvidia isAMD isNotAMD isIntel isNotIntel;
+  inherit theme;
 }
