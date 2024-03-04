@@ -2,6 +2,10 @@
 
 #  Ceci's Opinionated NixOS Desktop Environments ❄️ 
 
+## Supported Desktop Environments
+
+- Gnome
+
 ## Usage
 
 ### `flake.nix` **(RECOMMENDED)**
