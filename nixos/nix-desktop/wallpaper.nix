@@ -2,7 +2,7 @@
 
 
 let
-  libx = import ../../lib { inherit config; };
+  libx = import ../../lib { inherit config pkgs; };
   cfg = config.nix-desktop;
 
   default-wallpaper = {

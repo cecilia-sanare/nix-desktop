@@ -6,7 +6,7 @@ let
     gnome = [ "sane" "mac" ];
   };
 
-  libx = import ../../lib { inherit config; };
+  libx = import ../../lib { inherit config pkgs; };
   inherit (lib) mkEnableOption mkOption mkIf mkMerge types;
   inherit (types) listOf nullOr;
 in

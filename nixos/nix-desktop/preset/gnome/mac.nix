@@ -7,15 +7,14 @@
 # TODO:
 # - Nautilus currently isn't customized
 # - Install the firefox theme
-# - Figure out how to specify the cursor w/o home-manager
 
 { inputs, lib, pkgs, config, ... }:
 
 let
+  libx = import ../../../../lib { inherit config pkgs; };
   cfg = config.nix-desktop;
 
   extensions = with pkgs.gnomeExtensions; [
-    hide-activities-button
     just-perfection
     dash-to-dock
     appindicator
@@ -24,7 +23,7 @@ let
   wallpaper = {
     dark = "https://raw.githubusercontent.com/vinceliuice/WhiteSur-wallpapers/main/4k/Monterey.jpg";
     light = "https://raw.githubusercontent.com/vinceliuice/WhiteSur-wallpapers/main/4k/WhiteSur-light.jpg";
-  }.${if cfg.theme.dark then "dark" else "light"};
+  }.${libx.theme};
 
   isEnabled = cfg.type == "gnome" && cfg.preset == "mac";
 
@@ -32,14 +31,34 @@ let
 in
 {
   config = mkIf (isEnabled) {
-    nix-desktop.theme.name = mkDefault "WhiteSur";
-    nix-desktop.wallpaper = mkDefault wallpaper;
-
     environment.systemPackages = with pkgs; extensions ++ [
+      apple-cursor
       whitesur-icon-theme
       whitesur-gtk-theme
       whitesur-kde
     ];
+
+    nix-desktop.theme.gtk = {
+      light = mkDefault "WhiteSur";
+      dark = mkDefault "WhiteSur-Dark";
+    };
+
+    nix-desktop.theme.qt = {
+      light = mkDefault "WhiteSur";
+      dark = mkDefault "WhiteSur-Dark";
+    };
+
+    nix-desktop.theme.icons = {
+      light = mkDefault "WhiteSur";
+      dark = mkDefault "WhiteSur-Dark";
+    };
+
+    nix-desktop.theme.cursors = {
+      light = mkDefault "macOS-Monterey-White";
+      dark = mkDefault "macOS-Monterey";
+    };
+
+    nix-desktop.wallpaper = mkDefault wallpaper;
 
     programs.dconf.profiles.user.databases =
       let
@@ -67,23 +86,5 @@ in
           "org/gnome/shell".enabled-extensions = map (x: x.extensionUuid) extensions;
         };
       }];
-
-    # TODO: Find a way to change the background and cursor w/o home-manager
-    # home-manager.sharedModules = [
-    #   ({ config, ... }: {
-    #     dotfiles.desktop = {
-    #       enable = mkDefault true;
-    #       background = mkDefault "https://raw.githubusercontent.com/vinceliuice/WhiteSur-wallpapers/main/2k/Monterey.jpg";
-
-    #       cursor = mkDefault {
-    #         enable = true;
-    #         url = "https://github.com/ful1e5/apple_cursor/releases/download/v2.0.0/macOS-BigSur.tar.gz";
-    #         hash = "sha256-VZWFf1AHum2xDJPMZrBmcyVrrmYGKwCdXOPATw7myOA=";
-    #         name = "macOS-BigSur";
-    #       };
-    #     };
-
-    #   })
-    # ];
   };
 }

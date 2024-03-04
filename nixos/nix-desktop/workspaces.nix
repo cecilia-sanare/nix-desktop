@@ -5,7 +5,7 @@ let
     enable = super_cfg.enable && super_cfg.workspaces != null;
   };
 
-  libx = import ../../lib { inherit config; };
+  libx = import ../../lib { inherit config pkgs; };
   inherit (lib) mkEnableOption mkOption mkIf mkMerge types;
   inherit (types) listOf nullOr submodule;
 in

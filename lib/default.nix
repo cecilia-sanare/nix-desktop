@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 let
   isHeadless = config.nix-desktop.type == null;
   isNotHeadless = !isHeadless;
@@ -16,9 +16,19 @@ let
   isNotIntel = !isIntel;
 
   theme = if config.nix-desktop.theme.dark then "dark" else "light";
+
+  fetchCursor = { name, url, hash ? "" }: {
+    inherit name;
+    package = pkgs.runCommand "moveUp" { } ''
+      mkdir -p $out/share/icons
+      ln -s ${pkgs.fetchzip {
+        inherit url hash;
+      }} $out/share/icons/${name}
+    '';
+  };
 in
 {
   inherit isHeadless isNotHeadless isGnome;
   inherit isNvidia isNotNvidia isAMD isNotAMD isIntel isNotIntel;
-  inherit theme;
+  inherit theme fetchCursor;
 }
