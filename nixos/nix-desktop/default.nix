@@ -22,11 +22,12 @@ let
 in
 {
   imports = [
-    ./type
     ./preset
-    ./dark.nix
+    ./type
     ./alerts.nix
+    ./audio.nix
     ./clock.nix
+    ./dark.nix
     ./sleep.nix
     ./workspaces.nix
   ];
@@ -52,21 +53,6 @@ in
   };
 
   config = mkIf (cfg.enable) {
-    # TODO: Move sound config into its own module and make it configurable
-    environment.systemPackages = with pkgs; [
-      pipewire
-    ];
-
-    sound.enable = false;
-    hardware.pulseaudio.enable = false;
-    services.pipewire = {
-      enable = true;
-      alsa.enable = true;
-      alsa.support32Bit = true;
-      pulse.enable = true;
-      jack.enable = true;
-    };
-
     # Seems redundant to have two terminals
     services.xserver.excludePackages = with pkgs; [ xterm ];
 

@@ -2,9 +2,43 @@
 
 #  Ceci's Opinionated NixOS Desktop Environments ❄️ 
 
+> The primary goal of this module is to make swapping between desktop environments as seamless as possible.
+> 
+>*(also to get my desktop configuration out of my `nix-config`)*
+
 ## Supported Desktop Environments
 
-- Gnome
+### Gnome
+
+**Stock** 
+
+Just the stock gnome desktop environment with a few minor tweaks based on our defaults
+
+- Audio alerts are off (this can be turned off by setting `nix-desktop.alerts` to `true`)
+- Dark mode (this can be turned off by setting `nix-desktop.dark` to `false`)
+
+**Sane**
+
+<details>
+  <summary>Screenshots</summary>
+
+  ![Screenshot](./screenshots/sane.png?raw=true)
+
+</details>
+
+- Removes all of the stock gnome apps except for the following:
+  - Gnome Terminal
+  - Unzip Utility (aka File Roller)
+  - File Viewer (aka nautilus)
+  - System Monitor
+  - Disk Usage Analyzer (aka boabab)
+  - Image Viewer (aka eog)
+- `enable-hot-corners` is set to `false`
+- `edge-tiling` is enabled
+- Nautilus `default-zoom-level` is set to `small-plus`
+- Dash to dock is installed in preconfigured
+- Activities button is removed
+- Tray icons are enabled
 
 ## Usage
 
