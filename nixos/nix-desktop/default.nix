@@ -6,17 +6,7 @@ let
     gnome = [ "sane" "mac" ];
   };
 
-  # Nvidia GPUs via the proprietary driver are hit and miss on Wayland unfortunately.
-  # Hence why this check exists
-  isNvidia = builtins.elem "nvidia" config.services.xserver.videoDrivers;
-  isNotNvidia = !isNvidia;
-  # Used purely for opengl drivers
-  isAMD = builtins.elem "amd" config.services.xserver.videoDrivers;
-  isIntel = builtins.elem "intel" config.services.xserver.videoDrivers;
-
-  isHeadless = cfg.type == null;
-  isNotHeadless = !isHeadless;
-
+  libx = import ../../lib { inherit config; };
   inherit (lib) mkEnableOption mkOption mkIf mkMerge types;
   inherit (types) listOf nullOr;
 in
@@ -50,17 +40,17 @@ in
     };
   };
 
-  config = mkIf (cfg.enable && isNotHeadless) {
+  config = mkIf (cfg.enable && libx.isNotHeadless) {
     hardware.opengl = {
       enable = true;
       driSupport = true;
       driSupport32Bit = true;
       extraPackages = with pkgs; [
-        (mkIf isAMD amdvlk)
-        (mkIf isIntel intel-media-driver)
-        (mkIf isIntel vaapiIntel)
-        (mkIf isIntel vaapiVdpau)
-        (mkIf isIntel libvdpau-va-gl)
+        (mkIf libx.isAMD amdvlk)
+        (mkIf libx.isIntel intel-media-driver)
+        (mkIf libx.isIntel vaapiIntel)
+        (mkIf libx.isIntel vaapiVdpau)
+        (mkIf libx.isIntel libvdpau-va-gl)
         libva
       ];
     };

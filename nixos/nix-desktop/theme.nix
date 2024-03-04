@@ -1,4 +1,5 @@
-{ lib, config, types, pkgs, ... }: let 
+{ lib, config, types, pkgs, ... }:
+let
   super-cfg = config.nix-desktop;
   cfg = super-cfg.theme;
 
@@ -7,21 +8,21 @@
   }.${super-cfg.type};
 
   getTheme = theme: if cfg.dark then "${theme}-dark" else theme;
-  theme = getTheme(cfg.name);
-
-  isGnome = super-cfg.type == "gnome";
+  theme = getTheme (cfg.name);
 
   extensions = with pkgs.gnomeExtensions; [
     user-themes
   ];
 
+  libx = import ../../lib { inherit config; };
   inherit (lib) mkIf mkEnableOption mkMerge mkOption mkDefault types;
-in {
+in
+{
   options.nix-desktop.theme = {
     enable = mkEnableOption "theme configuration" // {
       default = true;
     };
-    
+
     name = mkOption {
       description = "The theme to use.";
       type = types.str;
@@ -33,8 +34,8 @@ in {
     };
   };
 
-  config = mkIf(cfg.enable) (mkMerge [
-    (mkIf(isGnome) {
+  config = mkIf (cfg.enable) (mkMerge [
+    (mkIf (libx.isGnome) {
       environment.systemPackages = extensions;
       # qt = {
       #   enable = true;

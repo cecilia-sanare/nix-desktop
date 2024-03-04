@@ -1,9 +1,11 @@
-{ lib, config, pkgs, ... }: let 
+{ lib, config, pkgs, ... }:
+let
   cfg = config.nix-desktop;
-  isGnome = cfg.type == "gnome";
 
+  libx = import ../../lib { inherit config; };
   inherit (lib) mkEnableOption mkIf;
-in {
+in
+{
   options.nix-desktop.sleep = mkEnableOption "sleep" // {
     default = true;
   };
@@ -20,23 +22,25 @@ in {
     systemd.targets.hibernate.enable = cfg.sleep;
     systemd.targets.hybrid-sleep.enable = cfg.sleep;
 
-    programs.dconf.profiles.user.databases = let
-      inherit (lib.gvariant) mkInt32 mkUint32;
-    in [
-      (mkIf (isGnome) {
-        settings = {
-          "org/gnome/settings-daemon/plugins/power" = if cfg.sleep then null else {
-            power-button-action = "nothing";
-            sleep-inactive-ac-type = "nothing";
-            sleep-inactive-ac-timeout = mkInt32 0;
-            sleep-inactive-battery-timeout = mkInt32 0;
-          };
+    programs.dconf.profiles.user.databases =
+      let
+        inherit (lib.gvariant) mkInt32 mkUint32;
+      in
+      [
+        (mkIf (libx.isGnome) {
+          settings = {
+            "org/gnome/settings-daemon/plugins/power" = if cfg.sleep then null else {
+              power-button-action = "nothing";
+              sleep-inactive-ac-type = "nothing";
+              sleep-inactive-ac-timeout = mkInt32 0;
+              sleep-inactive-battery-timeout = mkInt32 0;
+            };
 
-          "org/gnome/desktop/session" = if cfg.sleep then null else {
-            idle-delay = mkUint32 0;
+            "org/gnome/desktop/session" = if cfg.sleep then null else {
+              idle-delay = mkUint32 0;
+            };
           };
-        };
-      })
-    ];
+        })
+      ];
   };
 }
