@@ -3,7 +3,7 @@ let
   cfg = config.nix-desktop;
 
   themes = {
-    gnome = [ "sane" ];
+    gnome = [ "sane" "mac" ];
   };
 
   # Nvidia GPUs via the proprietary driver are hit and miss on Wayland unfortunately.
@@ -30,6 +30,7 @@ in
     ./default-apps.nix
     ./sleep.nix
     ./theme.nix
+    ./wallpaper.nix
     ./workspaces.nix
   ];
 
@@ -49,8 +50,8 @@ in
     };
   };
 
-  config = mkIf (cfg.enable) {
-    hardware.opengl = mkIf (isNotHeadless) {
+  config = mkIf (cfg.enable && isNotHeadless) {
+    hardware.opengl = {
       enable = true;
       driSupport = true;
       driSupport32Bit = true;
@@ -64,6 +65,6 @@ in
       ];
     };
 
-    services.xserver.enable = isNotHeadless;
+    services.xserver.enable = true;
   };
 }

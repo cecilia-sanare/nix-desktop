@@ -6,11 +6,16 @@
     gnome = "adwaita";
   }.${super-cfg.type};
 
-  theme = if cfg.dark then "${cfg.name}-dark" else cfg.name;
+  getTheme = theme: if cfg.dark then "${theme}-dark" else theme;
+  theme = getTheme(cfg.name);
 
   isGnome = super-cfg.type == "gnome";
 
-  inherit (lib) mkIf mkEnableOption mkMerge mkOption types;
+  extensions = with pkgs.gnomeExtensions; [
+    user-themes
+  ];
+
+  inherit (lib) mkIf mkEnableOption mkMerge mkOption mkDefault types;
 in {
   options.nix-desktop.theme = {
     enable = mkEnableOption "theme configuration" // {
@@ -30,14 +35,25 @@ in {
 
   config = mkIf(cfg.enable) (mkMerge [
     (mkIf(isGnome) {
-      qt.style = theme;
+      environment.systemPackages = extensions;
+      # qt = {
+      #   enable = true;
+      #   platformTheme = super-cfg.type;
+      #   style = mkDefault getTheme(default-theme);
+      # };
 
       programs.dconf.profiles.user.databases = [{
         settings = {
           "org/gnome/desktop/interface".gtk-theme = theme;
           "org/gnome/desktop/interface".color-scheme = if cfg.dark then "prefer-dark" else "prefer-light";
+          "org/gnome/shell/extensions/user-theme".name = theme;
+          "org/gnome/shell".enabled-extensions = map (x: x.extensionUuid) extensions;
         };
       }];
+
+      environment.variables = {
+        QT_STYLE_OVERRIDE = theme;
+      };
     })
   ]);
 }

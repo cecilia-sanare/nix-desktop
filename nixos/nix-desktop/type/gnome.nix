@@ -18,10 +18,5 @@ in {
         wayland = isNotNvidia;
       };
     };
-
-    qt = {
-      enable = true;
-      platformTheme = "gnome";
-    };
   };
 }
