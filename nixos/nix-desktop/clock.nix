@@ -8,8 +8,8 @@ in
 {
   options.nix-desktop.clock = mkOption {
     description = "The clock format to use";
-    type = types.enum ([ "12hr" "24hr" ]);
-    default = "12hr";
+    type = types.enum ([ "12h" "24h" ]);
+    default = "12h";
   };
 
   config = mkIf (cfg.enable) {
