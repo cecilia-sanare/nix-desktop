@@ -16,6 +16,14 @@ Just the stock gnome desktop environment with a few minor tweaks based on our de
 
 - Audio alerts are off (this can be turned off by setting `nix-desktop.alerts` to `true`)
 - Dark mode (this can be turned off by setting `nix-desktop.dark` to `false`)
+- Removes all of the stock gnome apps and `xterm`.
+- Adds the following default apps (this can be turned off by setting `nix-desktop.default-apps` to `null`):
+  - Gnome Terminal
+  - Unzip Utility (aka File Roller)
+  - File Viewer (aka nautilus)
+  - System Monitor
+  - Disk Usage Analyzer (aka boabab)
+  - Image Viewer (aka eog)
 
 **Sane**
 
@@ -26,13 +34,6 @@ Just the stock gnome desktop environment with a few minor tweaks based on our de
 
 </details>
 
-- Removes all of the stock gnome apps except for the following:
-  - Gnome Terminal
-  - Unzip Utility (aka File Roller)
-  - File Viewer (aka nautilus)
-  - System Monitor
-  - Disk Usage Analyzer (aka boabab)
-  - Image Viewer (aka eog)
 - `enable-hot-corners` is set to `false`
 - `edge-tiling` is enabled
 - Nautilus `default-zoom-level` is set to `small-plus`

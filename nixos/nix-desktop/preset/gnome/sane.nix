@@ -14,21 +14,6 @@
   inherit (lib) mkIf;
 in {
   config = mkIf(isEnabled) {
-    environment.gnome.excludePackages = with pkgs; [
-      gnome-tour
-    ];
-
-    environment.systemPackages = with pkgs; extensions ++ lib.optionals cfg.defaultApps ([
-      gnome.gnome-terminal
-      gnome.file-roller
-      gnome.nautilus
-      gnome.gnome-system-monitor
-      baobab # Disk usage analyzer
-      gparted
-      gnome.eog # Image Viewer
-    ]);
-
-    services.gnome.core-utilities.enable = false;
     services.gvfs.enable = true;
 
     programs.dconf.profiles.user.databases = let

@@ -28,6 +28,7 @@ in
     ./audio.nix
     ./clock.nix
     ./dark.nix
+    ./default-apps.nix
     ./sleep.nix
     ./workspaces.nix
   ];
@@ -46,16 +47,9 @@ in
       type = nullOr (types.enum (if cfg.type == null then [ ] else themes.${cfg.type}));
       default = null;
     };
-
-    defaultApps = mkEnableOption "default desktop environment apps" // {
-      default = true;
-    };
   };
 
   config = mkIf (cfg.enable) {
-    # Seems redundant to have two terminals
-    services.xserver.excludePackages = with pkgs; [ xterm ];
-
     hardware.opengl = mkIf (isNotHeadless) {
       enable = true;
       driSupport = true;
