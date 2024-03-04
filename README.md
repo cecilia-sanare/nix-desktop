@@ -15,7 +15,7 @@
 Just the stock gnome desktop environment with a few minor tweaks based on our defaults
 
 - Audio alerts are off (this can be turned off by setting `nix-desktop.alerts` to `true`)
-- Dark mode (this can be turned off by setting `nix-desktop.dark` to `false`)
+- Dark mode (this can be turned off by setting `nix-desktop.theme.dark` to `false`)
 - Removes all of the stock gnome apps and `xterm`.
 - Adds the following default apps (this can be turned off by setting `nix-desktop.default-apps` to `null`):
   - Gnome Terminal

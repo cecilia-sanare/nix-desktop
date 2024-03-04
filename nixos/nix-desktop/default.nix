@@ -27,9 +27,9 @@ in
     ./alerts.nix
     ./audio.nix
     ./clock.nix
-    ./dark.nix
     ./default-apps.nix
     ./sleep.nix
+    ./theme.nix
     ./workspaces.nix
   ];
 
