@@ -1,0 +1,56 @@
+{ lib, config, types, pkgs, ... }: let 
+  cfg = config.nix-desktop;
+
+  extensions = with pkgs; [
+    gnomeExtensions.user-themes
+    gnomeExtensions.hide-activities-button
+    gnomeExtensions.just-perfection
+    gnomeExtensions.dash-to-dock
+    gnomeExtensions.appindicator
+  ];
+  
+  isEnabled = cfg.type == "gnome" && cfg.preset == "sane";
+
+  inherit (lib) mkIf;
+in {
+  config = mkIf(isEnabled) {
+    environment.gnome.excludePackages = with pkgs; [
+      gnome-tour
+    ];
+
+    environment.systemPackages = with pkgs; extensions ++ lib.optionals cfg.defaultApps ([
+      gnome.gnome-terminal
+      gnome.file-roller
+      gnome.nautilus
+      gnome.gnome-system-monitor
+      baobab # Disk usage analyzer
+      gparted
+      gnome.eog # Image Viewer
+    ]);
+
+    services.gnome.core-utilities.enable = false;
+    services.gvfs.enable = true;
+
+    programs.dconf.profiles.user.databases = let
+      inherit (lib.gvariant) mkInt32;
+    in [{
+      settings = {
+        "org/gnome/desktop/interface".enable-hot-corners = false;
+        "org/gnome/mutter".edge-tiling = true;
+        "org/gnome/desktop/wm/preferences".button-layout = "minimize,maximize,close:";
+        "org/gnome/nautilus/icon-view".default-zoom-level = "small-plus";
+
+        "org/gnome/shell/extensions/dash-to-dock" = {
+          click-action = "minimize-or-previews";
+          show-trash = false;
+          dash-max-icon-size = mkInt32 80;
+          multi-monitor = true;
+          running-indicator-style = "DOTS";
+          custom-theme-shrink = false;
+        };
+
+        "org/gnome/shell".enabled-extensions = map (x: x.extensionUuid) extensions;
+      };
+    }];
+  };
+}
