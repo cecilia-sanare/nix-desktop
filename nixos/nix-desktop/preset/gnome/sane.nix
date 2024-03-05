@@ -16,6 +16,8 @@ let
 in
 {
   config = mkIf (isEnabled) {
+    environment.systemPackages = with pkgs; extensions;
+
     nix-desktop.workspaces.number = mkDefault 1;
 
     programs.dconf.profiles.user.databases =
