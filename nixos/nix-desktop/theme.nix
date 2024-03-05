@@ -10,12 +10,12 @@ let
   default-theme = {
     gnome = {
       gtk = {
-        light = "adwaita";
-        dark = "adwaita-dark";
+        light = "Adwaita";
+        dark = "Adwaita";
       };
       qt = {
-        light = "adwaita";
-        dark = "adwaita-dark";
+        light = "Adwaita";
+        dark = "Adwaita";
       };
     };
   }.${super-cfg.type};
