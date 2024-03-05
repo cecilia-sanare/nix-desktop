@@ -18,6 +18,7 @@ let
     just-perfection
     dash-to-dock
     appindicator
+    blur-my-shell
   ];
 
   wallpaper = {
