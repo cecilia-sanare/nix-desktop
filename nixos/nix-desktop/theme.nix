@@ -9,8 +9,14 @@ let
 
   default-theme = {
     gnome = {
-      gtk = "adwaita";
-      qt = "adwaita";
+      gtk = {
+        light = "adwaita";
+        dark = "adwaita-dark";
+      };
+      qt = {
+        light = "adwaita";
+        dark = "adwaita-dark";
+      };
     };
   }.${super-cfg.type};
 
@@ -26,13 +32,11 @@ let
       light = mkOption {
         description = "The light theme to use.";
         type = types.str;
-        default = default-theme.gtk;
       };
 
       dark = mkOption {
         description = "The dark theme to use.";
         type = types.str;
-        default = default-theme.gtk;
       };
     };
   };
@@ -75,12 +79,6 @@ in
   config = mkIf (cfg.enable) (mkMerge [
     (mkIf (libx.isGnome) {
       environment.systemPackages = extensions;
-      # qt = {
-      #   enable = true;
-      #   platformTheme = super-cfg.type;
-      #   style = mkDefault getTheme(default-theme);
-      # };
-
       programs.dconf.profiles.user.databases =
         let
           inherit (lib.gvariant) mkInt32;
@@ -91,7 +89,6 @@ in
               "org/gnome/desktop/interface" = {
                 gtk-theme = gtk-theme;
                 color-scheme = if cfg.dark then "prefer-dark" else "prefer-light";
-                icon-theme = cfg.icons.${libx.theme};
                 cursor-size = mkInt32 32;
               };
               "org/gnome/shell/extensions/user-theme".name = gtk-theme;
