@@ -1,16 +1,16 @@
 **:warning: WIP :warning:**
 
-#  Ceci's Opinionated NixOS Desktop Environments ❄️ 
+# Ceci's Opinionated NixOS Desktop Environments ❄️
 
 > The primary goal of this module is to make swapping between desktop environments as seamless as possible.
-> 
->*(also to get my desktop configuration out of my `nix-config`)*
+>
+> _(also to get my desktop configuration out of my `nix-config`)_
 
 ## Supported Desktop Environments
 
 ### Gnome
 
-**Stock** 
+**Stock `"null"`**
 
 Just the stock gnome desktop environment with a few minor tweaks based on our defaults
 
@@ -25,14 +25,15 @@ Just the stock gnome desktop environment with a few minor tweaks based on our de
   - Disk Usage Analyzer (aka boabab)
   - Image Viewer (aka eog)
 
-**Sane**
+**Sane `"sane"`**
 
 <details>
   <summary>Screenshots</summary>
 
-  ![Screenshot](./screenshots/sane.png?raw=true)
+![Screenshot](./screenshots/sane.png?raw=true)
 
 </details>
+<br/>
 
 - `enable-hot-corners` is set to `false`
 - `edge-tiling` is enabled
@@ -40,6 +41,18 @@ Just the stock gnome desktop environment with a few minor tweaks based on our de
 - Dash to dock is installed in preconfigured
 - Activities button is removed
 - Tray icons are enabled
+
+**Mac `"mac"`**
+
+<details>
+  <summary>Screenshots</summary>
+
+![Screenshot](./screenshots/mac.png?raw=true)
+
+</details>
+<br/>
+
+_TODO_
 
 ## Usage
 
@@ -86,7 +99,7 @@ Even if flakes are still experimental, they're the best way of managing dependen
 
 ### `configuration.nix` **(NOT RECOMMENDED)**
 
-This method of importing modules *really* isn't recommended.
+This method of importing modules _really_ isn't recommended.
 The primary issue is that it doesn't lock down the dependencies which can prevent your nix configuration from being reproducible.
 
 ```nix
