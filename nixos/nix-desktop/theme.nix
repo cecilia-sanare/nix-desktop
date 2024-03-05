@@ -40,6 +40,26 @@ let
       };
     };
   };
+
+  cursorSubmodule = types.submodule {
+    options = {
+      size = mkOption {
+        description = "The size of the cursor.";
+        type = nullOr (types.int);
+        default = null;
+      };
+
+      light = mkOption {
+        description = "The light cursor theme to use.";
+        type = types.str;
+      };
+
+      dark = mkOption {
+        description = "The dark cursor theme to use.";
+        type = types.str;
+      };
+    };
+  };
 in
 {
   options.nix-desktop.theme = {
@@ -67,7 +87,7 @@ in
 
     cursors = mkOption {
       description = "The cursor theme to use.";
-      type = nullOr (themeSubmodule);
+      type = nullOr (cursorSubmodule);
       default = null;
     };
 
@@ -89,7 +109,6 @@ in
               "org/gnome/desktop/interface" = {
                 gtk-theme = gtk-theme;
                 color-scheme = if cfg.dark then "prefer-dark" else "prefer-light";
-                cursor-size = mkInt32 32;
               };
               "org/gnome/shell/extensions/user-theme".name = gtk-theme;
               "org/gnome/shell".enabled-extensions = map (x: x.extensionUuid) extensions;
@@ -101,6 +120,9 @@ in
           })
           (mkIf (cfg.cursors != null) {
             settings."org/gnome/desktop/interface".cursor-theme = cfg.cursors.${libx.theme};
+          })
+          (mkIf (cfg.cursors != null && cfg.cursors.size != null) {
+            settings."org/gnome/desktop/interface".cursor-size = mkInt32 32;
           })
         ];
 

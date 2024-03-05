@@ -55,6 +55,7 @@ in
     };
 
     nix-desktop.theme.cursors = {
+      size = mkDefault 32;
       light = mkDefault "macOS-Monterey-White";
       dark = mkDefault "macOS-Monterey";
     };
