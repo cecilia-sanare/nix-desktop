@@ -55,8 +55,9 @@ let
     options = {
       size = mkOption {
         description = "The size of the cursor.";
-        type = nullOr (types.int);
-        default = null;
+        type = types.int;
+        default = 32;
+        example = 64;
       };
 
       light = mkOption {
@@ -107,6 +108,12 @@ in
   };
 
   config = mkIf (cfg.enable) (mkMerge [
+    {
+      environment.variables = mkIf (cfg.cursors != null) {
+        XCURSOR_SIZE = mkDefault (builtins.toString (cfg.cursors.size));
+        XCURSOR_THEME = mkDefault cfg.cursors.${libx.theme};
+      };
+    }
     (mkIf (libx.isGnome) {
       environment.systemPackages = with pkgs; extensions ++ [
         gnome.gnome-themes-extra
@@ -134,10 +141,8 @@ in
             settings."org/gnome/desktop/interface".icon-theme = cfg.icons.${libx.theme};
           })
           (mkIf (cfg.cursors != null) {
-            settings."org/gnome/desktop/interface".cursor-theme = cfg.cursors.${libx.theme};
-          })
-          (mkIf (cfg.cursors != null && cfg.cursors.size != null) {
             settings."org/gnome/desktop/interface".cursor-size = mkInt32 32;
+            settings."org/gnome/desktop/interface".cursor-theme = cfg.cursors.${libx.theme};
           })
         ];
 
