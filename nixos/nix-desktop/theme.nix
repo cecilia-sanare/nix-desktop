@@ -23,10 +23,6 @@ let
         light = "Adwaita";
         dark = "Adwaita";
       };
-      cursors = {
-        light = "Adwaita";
-        dark = "Adwaita";
-      };
     };
   }.${super-cfg.type};
 
@@ -46,27 +42,6 @@ let
 
       dark = mkOption {
         description = "The dark theme to use.";
-        type = types.str;
-      };
-    };
-  };
-
-  cursorSubmodule = types.submodule {
-    options = {
-      size = mkOption {
-        description = "The size of the cursor.";
-        type = types.int;
-        default = 32;
-        example = 64;
-      };
-
-      light = mkOption {
-        description = "The light cursor theme to use.";
-        type = types.str;
-      };
-
-      dark = mkOption {
-        description = "The dark cursor theme to use.";
         type = types.str;
       };
     };
@@ -96,24 +71,12 @@ in
       default = default-theme.icons;
     };
 
-    cursors = mkOption {
-      description = "The cursor theme to use.";
-      type = cursorSubmodule;
-      default = default-theme.cursors;
-    };
-
     dark = mkEnableOption "dark mode" // {
       default = true;
     };
   };
 
   config = mkIf (cfg.enable) (mkMerge [
-    {
-      environment.variables = mkIf (cfg.cursors != null) {
-        XCURSOR_SIZE = mkDefault (builtins.toString (cfg.cursors.size));
-        XCURSOR_THEME = mkDefault cfg.cursors.${libx.theme};
-      };
-    }
     (mkIf (libx.isGnome) {
       environment.systemPackages = with pkgs; extensions ++ [
         gnome.gnome-themes-extra
@@ -139,10 +102,6 @@ in
           # TODO: Is there an easier way to do this?
           (mkIf (cfg.icons != null) {
             settings."org/gnome/desktop/interface".icon-theme = cfg.icons.${libx.theme};
-          })
-          (mkIf (cfg.cursors != null) {
-            settings."org/gnome/desktop/interface".cursor-size = mkInt32 32;
-            settings."org/gnome/desktop/interface".cursor-theme = cfg.cursors.${libx.theme};
           })
         ];
 

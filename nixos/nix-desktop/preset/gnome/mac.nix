@@ -33,7 +33,6 @@ in
 {
   config = mkIf (isEnabled) {
     environment.systemPackages = with pkgs; extensions ++ [
-      apple-cursor
       whitesur-icon-theme
       whitesur-gtk-theme
       whitesur-kde
@@ -52,12 +51,6 @@ in
     nix-desktop.theme.icons = {
       light = mkDefault "WhiteSur";
       dark = mkDefault "WhiteSur-Dark";
-    };
-
-    nix-desktop.theme.cursors = {
-      size = mkDefault 32;
-      light = mkDefault "macOS-Monterey-White";
-      dark = mkDefault "macOS-Monterey";
     };
 
     nix-desktop.wallpaper = mkDefault wallpaper;
