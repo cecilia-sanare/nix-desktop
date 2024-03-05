@@ -9,11 +9,21 @@ let
 
   default-theme = {
     gnome = {
-      gtk = {
+      themes = {
+        gtk = {
+          light = "Adwaita";
+          dark = "Adwaita-dark";
+        };
+        qt = {
+          light = "adwaita";
+          dark = "adwaita-dark";
+        };
+      };
+      icons = {
         light = "Adwaita";
         dark = "Adwaita";
       };
-      qt = {
+      cursors = {
         light = "Adwaita";
         dark = "Adwaita";
       };
@@ -70,25 +80,25 @@ in
     gtk = mkOption {
       description = "The gtk theme to use.";
       type = themeSubmodule;
-      default = default-theme.gtk;
+      default = default-theme.themes.gtk;
     };
 
     qt = mkOption {
       description = "The qt theme to use.";
       type = themeSubmodule;
-      default = default-theme.qt;
+      default = default-theme.themes.qt;
     };
 
     icons = mkOption {
       description = "The icon theme to use.";
-      type = nullOr (themeSubmodule);
-      default = null;
+      type = themeSubmodule;
+      default = default-theme.icons;
     };
 
     cursors = mkOption {
       description = "The cursor theme to use.";
-      type = nullOr (cursorSubmodule);
-      default = null;
+      type = cursorSubmodule;
+      default = default-theme.cursors;
     };
 
     dark = mkEnableOption "dark mode" // {
@@ -98,7 +108,12 @@ in
 
   config = mkIf (cfg.enable) (mkMerge [
     (mkIf (libx.isGnome) {
-      environment.systemPackages = extensions;
+      environment.systemPackages = with pkgs; extensions ++ [
+        gnome.gnome-themes-extra
+        adwaita-qt
+        adwaita-qt6
+      ];
+
       programs.dconf.profiles.user.databases =
         let
           inherit (lib.gvariant) mkInt32;
