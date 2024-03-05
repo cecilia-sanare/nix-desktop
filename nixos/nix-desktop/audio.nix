@@ -1,38 +1,37 @@
-{ lib, config, pkgs, ... }: let 
-  cfg = {
-    enable = config.nix-desktop.enable && config.nix-desktop.audio != null;
-    isPipewire = config.nix-desktop.audio == "pipewire";
-    isPulseaudio = config.nix-desktop.audio == "pulseaudio";
-  };
+{ lib, config, pkgs, ... }:
+let
+  cfg = config.nix-desktop;
 
-  inherit (lib) mkOption mkIf types;
+  inherit (lib) mkOption mkIf mkDefault types;
   inherit (types) nullOr;
-in {
+in
+{
   options.nix-desktop.audio = mkOption {
     description = "The audio server to use";
-    type = nullOr(types.enum(["pulseaudio" "pipewire"]));
+    type = nullOr (types.enum ([ "pulseaudio" "pipewire" ]));
     default = "pipewire";
   };
 
-  config = mkIf (cfg.enable) {
-    # TODO: Move sound config into its own module and make it configurable
-    environment.systemPackages = with pkgs; [
-      (mkIf (cfg.isPipewire) pulseaudio)
-    ];
+  config =
+    let
+      isPipewire = cfg.audio == "pipewire";
+      isPulseaudio = cfg.audio == "pulseaudio";
+    in
+    mkIf (cfg.enable) {
+      environment.systemPackages = with pkgs; [
+        (mkIf (isPipewire) pipewire)
+      ];
 
-    services.pipewire = mkIf (cfg.isPipewire == "pipewire") {
-      enable = true;
-      alsa.enable = true;
-      alsa.support32Bit = true;
-      pulse.enable = true;
-      jack.enable = true;
+      sound.enable = isPulseaudio;
+      hardware.pulseaudio.enable = isPulseaudio;
+      security.rtkit.enable = mkDefault true;
+      services.pipewire = mkIf (isPipewire) {
+        enable = true;
+        alsa.enable = mkDefault true;
+        alsa.support32Bit = mkDefault true;
+        pulse.enable = mkDefault true;
+        jack.enable = mkDefault true;
+        wireplumber.enable = mkDefault true;
+      };
     };
-
-    sound.enable = cfg.isPulseaudio;
-    hardware.pulseaudio = {
-      enable = cfg.isPulseaudio;
-      support32Bit = true;
-      package = pkgs.pulseaudioFull;
-    };
-  };
 }
