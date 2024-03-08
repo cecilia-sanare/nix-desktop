@@ -20,7 +20,7 @@ in
         gparted
         gnome.eog # Image Viewer
       ];
-    }.${cfg.type});
+    }.${cfg.type} or [ ]);
   };
 
   config = mkIf (cfg.enable && cfg.default-apps != null) {
