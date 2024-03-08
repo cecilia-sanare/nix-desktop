@@ -21,7 +21,15 @@ let
   has32BitSupport = pkgs.stdenv.isx86_64 || config.boot.kernelPackages.kernel.features.ia32Emulation or false;
 in
 {
-  inherit isHeadless isNotHeadless isGnome;
+  # Platform Helpers
+  inherit has32BitSupport;
+
+  # Desktop Helpers
+  inherit isHeadless isNotHeadless isGnome isKodi;
+
+  # GPU Helpers
   inherit isNvidia isNotNvidia isAMD isNotAMD isIntel isNotIntel;
+
+  # Theme Helpers
   inherit theme;
 }
