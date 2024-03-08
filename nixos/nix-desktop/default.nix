@@ -2,49 +2,32 @@
 let
   cfg = config.nix-desktop;
 
-  themes = {
-    gnome = [ "sane" "mac" ];
-  };
-
   libx = import ../../lib { inherit config pkgs; };
   inherit (lib) mkEnableOption mkOption mkIf mkMerge types;
   inherit (types) listOf nullOr;
 in
 {
   imports = [
-    ./preset
-    ./type
-    ./alerts.nix
-    ./audio.nix
-    ./clock.nix
-    ./default-apps.nix
-    ./sleep.nix
-    ./theme.nix
-    ./wallpaper.nix
-    ./workspaces.nix
+    ./type # settings for  'nix-desktop.type'
+    ./preset # settings for  'nix-desktop.preset'
+    ./kodi # settings for  'nix-desktop.kodi'
+    ./alerts.nix # settings for 'nix-desktop.alerts'
+    ./audio.nix # settings for 'nix-desktop.audio'
+    ./clock.nix # settings for 'nix-desktop.clock'
+    ./default-apps.nix # settings for 'nix-desktop.default-apps'
+    ./sleep.nix # settings for 'nix-desktop.sleep'
+    ./theme.nix # settings for 'nix-desktop.theme'
+    ./wallpaper.nix # settings for 'nix-desktop.wallpaper'
+    ./workspaces.nix # settings for 'nix-desktop.workspaces'
   ];
 
-  options.nix-desktop = {
-    enable = mkEnableOption "nix-desktop configuration";
-
-    type = mkOption {
-      description = "The desktop environment to use";
-      type = nullOr (types.enum ([ "gnome" ]));
-      default = null;
-    };
-
-    preset = mkOption {
-      description = "The desktop preset to use (null just uses the stock gnome config)";
-      type = nullOr (types.enum (if cfg.type == null then [ ] else themes.${cfg.type}));
-      default = null;
-    };
-  };
+  options.nix-desktop.enable = mkEnableOption "nix-desktop configuration";
 
   config = mkIf (cfg.enable && libx.isNotHeadless) {
     hardware.opengl = {
       enable = true;
       driSupport = true;
-      driSupport32Bit = true;
+      driSupport32Bit = libx.has32BitSupport;
       extraPackages = with pkgs; [
         (mkIf libx.isAMD amdvlk)
         (mkIf libx.isIntel intel-media-driver)
