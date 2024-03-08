@@ -28,7 +28,7 @@ in
         settings = {
           "org/gnome/desktop/interface".enable-hot-corners = false;
           "org/gnome/mutter".edge-tiling = true;
-          "org/gnome/desktop/wm/preferences".button-layout = "minimize,maximize,close:";
+          "org/gnome/desktop/wm/preferences".button-layout = ":minimize,maximize,close";
           "org/gnome/nautilus/icon-view".default-zoom-level = "small-plus";
 
           "org/gnome/shell/extensions/dash-to-dock" = {
