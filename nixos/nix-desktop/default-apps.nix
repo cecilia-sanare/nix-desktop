@@ -7,19 +7,20 @@ let
 in
 {
   options.nix-desktop.default-apps = mkOption {
-      description = "The default desktop environment apps";
-      type = nullOr(listOf(types.package));
-      default = (with pkgs; {
-        gnome = [
-          gnome.gnome-terminal
-          gnome.file-roller
-          gnome.nautilus
-          gnome.gnome-system-monitor
-          baobab # Disk usage analyzer
-          gparted
-          gnome.eog # Image Viewer
-        ];
-      }.${cfg.type});
+    description = "The default desktop environment apps";
+    type = nullOr (listOf (types.package));
+    default = if cfg.type == null then null else
+    (with pkgs; {
+      gnome = [
+        gnome.gnome-terminal
+        gnome.file-roller
+        gnome.nautilus
+        gnome.gnome-system-monitor
+        baobab # Disk usage analyzer
+        gparted
+        gnome.eog # Image Viewer
+      ];
+    }.${cfg.type});
   };
 
   config = mkIf (cfg.enable && cfg.default-apps != null) {
