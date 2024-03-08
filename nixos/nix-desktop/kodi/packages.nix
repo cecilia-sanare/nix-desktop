@@ -15,6 +15,6 @@ in
   };
 
   config = mkIf (cfg.enable && libx.isKodi) {
-    services.xserver.desktopManager.kodi.package = (pkgs.kodi.passthru.withPackages cfg.kodi.packages);
+    services.xserver.desktopManager.kodi.package = pkgs.kodi.passthru.withPackages (_: cfg.kodi.packages);
   };
 }
