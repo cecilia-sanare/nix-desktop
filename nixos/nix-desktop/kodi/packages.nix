@@ -2,7 +2,7 @@
 let
   cfg = config.nix-desktop;
 
-  libx = import ../../lib { inherit config pkgs; };
+  libx = import ../../../lib { inherit config pkgs; };
   inherit (lib) mkOption mkIf types;
   inherit (types) nullOr listOf;
 in
