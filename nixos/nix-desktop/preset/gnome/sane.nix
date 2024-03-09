@@ -19,10 +19,17 @@ in
     environment.systemPackages = with pkgs; extensions;
 
     nix-desktop.workspaces.number = mkDefault 1;
+    nix-desktop.gnome.extensions = with pkgs.gnomeExtensions; mkDefault [
+      gnomeExtensions.user-themes
+      gnomeExtensions.hide-activities-button
+      gnomeExtensions.just-perfection
+      gnomeExtensions.dash-to-dock
+      gnomeExtensions.appindicator
+    ];
 
     programs.dconf.profiles.user.databases =
       let
-        inherit (lib.gvariant) mkInt32;
+        inherit (lib.gvariant) mkInt32 mkEmptyArray type;
       in
       [{
         settings = {
@@ -38,6 +45,13 @@ in
             multi-monitor = true;
             running-indicator-style = "DOTS";
             custom-theme-shrink = false;
+          };
+
+          "org/gnome/desktop/wm/keybindings" = {
+            switch-applications = mkEmptyArray (type.string);
+            switch-applications-backward = mkEmptyArray (type.string);
+            switch-windows = [ "<Alt>Tab" ];
+            switch-windows-backward = [ "<Shift><Alt>Tab" ];
           };
 
           "org/gnome/shell".enabled-extensions = map (x: x.extensionUuid) extensions;

@@ -11,6 +11,7 @@ in
     ./type # settings for  'nix-desktop.type'
     ./preset # settings for  'nix-desktop.preset'
     ./kodi # settings for  'nix-desktop.kodi'
+    ./gnome # settings for 'nix-desktop.gnome'
     ./alerts.nix # settings for 'nix-desktop.alerts'
     ./audio.nix # settings for 'nix-desktop.audio'
     ./clock.nix # settings for 'nix-desktop.clock'
