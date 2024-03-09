@@ -20,11 +20,11 @@ in
 
     nix-desktop.workspaces.number = mkDefault 1;
     nix-desktop.gnome.extensions = with pkgs.gnomeExtensions; mkDefault [
-      gnomeExtensions.user-themes
-      gnomeExtensions.hide-activities-button
-      gnomeExtensions.just-perfection
-      gnomeExtensions.dash-to-dock
-      gnomeExtensions.appindicator
+      user-themes
+      hide-activities-button
+      just-perfection
+      dash-to-dock
+      appindicator
     ];
 
     programs.dconf.profiles.user.databases =
