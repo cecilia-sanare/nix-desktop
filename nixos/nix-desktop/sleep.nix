@@ -14,7 +14,10 @@ in
     # TODO: Figure out what of these settings are gnome / x11 specific
 
     # No Sleep Settings
-    powerManagement.enable = cfg.sleep;
+
+    # Disabling this results in gnome disabling the battery indicator
+    # powerManagement.enable = cfg.sleep;
+
     # Disable the GNOME3/GDM auto-suspend feature that cannot be disabled in GUI!
     # If no user is logged in, the machine will power down after 20 minutes.
     systemd.targets.sleep.enable = cfg.sleep;
