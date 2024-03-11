@@ -15,7 +15,7 @@ in
     type = nullOr (submodule {
       options = {
         number = mkOption {
-          description = "The number of workspaces";
+          description = "The default number of workspaces";
           type = nullOr (types.int);
           default = 4;
         };
