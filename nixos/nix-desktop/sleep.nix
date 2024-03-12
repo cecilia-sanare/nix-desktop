@@ -30,16 +30,16 @@ in
         inherit (lib.gvariant) mkInt32 mkUint32;
       in
       [
-        (mkIf (libx.isGnome) {
+        (mkIf (libx.isGnome && !cfg.sleep) {
           settings = {
-            "org/gnome/settings-daemon/plugins/power" = if cfg.sleep then null else {
+            "org/gnome/settings-daemon/plugins/power" = {
               power-button-action = "nothing";
               sleep-inactive-ac-type = "nothing";
               sleep-inactive-ac-timeout = mkInt32 0;
               sleep-inactive-battery-timeout = mkInt32 0;
             };
 
-            "org/gnome/desktop/session" = if cfg.sleep then null else {
+            "org/gnome/desktop/session" = {
               idle-delay = mkUint32 0;
             };
           };
