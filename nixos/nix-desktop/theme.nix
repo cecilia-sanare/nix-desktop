@@ -29,10 +29,6 @@ let
   gtk-theme = cfg.gtk.${libx.theme};
   qt-theme = cfg.qt.${libx.theme};
 
-  extensions = with pkgs.gnomeExtensions; [
-    user-themes
-  ];
-
   themeSubmodule = types.submodule {
     options = {
       light = mkOption {
@@ -78,10 +74,14 @@ in
 
   config = mkIf (cfg.enable) (mkMerge [
     (mkIf (libx.isGnome) {
-      environment.systemPackages = with pkgs; extensions ++ [
+      environment.systemPackages = with pkgs; [
         gnome.gnome-themes-extra
         adwaita-qt
         adwaita-qt6
+      ];
+
+      nix-desktop.gnome.extensions = with pkgs.gnomeExtensions; [
+        user-themes
       ];
 
       programs.dconf.profiles.user.databases =
@@ -96,7 +96,6 @@ in
                 color-scheme = if cfg.dark then "prefer-dark" else "prefer-light";
               };
               "org/gnome/shell/extensions/user-theme".name = gtk-theme;
-              "org/gnome/shell".enabled-extensions = map (x: x.extensionUuid) extensions;
             };
           }
           # TODO: Is there an easier way to do this?

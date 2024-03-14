@@ -2,24 +2,14 @@
 let
   cfg = config.nix-desktop;
 
-  extensions = with pkgs; [
-    gnomeExtensions.user-themes
-    gnomeExtensions.hide-activities-button
-    gnomeExtensions.just-perfection
-    gnomeExtensions.dash-to-dock
-    gnomeExtensions.appindicator
-  ];
-
   isEnabled = cfg.type == "gnome" && cfg.preset == "sane";
 
   inherit (lib) mkIf mkDefault;
 in
 {
   config = mkIf (isEnabled) {
-    environment.systemPackages = with pkgs; extensions;
-
     nix-desktop.workspaces.number = mkDefault 1;
-    nix-desktop.gnome.extensions = with pkgs.gnomeExtensions; mkDefault [
+    nix-desktop.gnome.extensions = with pkgs.gnomeExtensions; [
       user-themes
       hide-activities-button
       just-perfection
@@ -53,8 +43,6 @@ in
             switch-windows = [ "<Alt>Tab" ];
             switch-windows-backward = [ "<Shift><Alt>Tab" ];
           };
-
-          "org/gnome/shell".enabled-extensions = map (x: x.extensionUuid) extensions;
         };
       }];
   };

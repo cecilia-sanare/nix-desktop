@@ -14,13 +14,6 @@ let
   libx = import ../../../../lib { inherit config pkgs; };
   cfg = config.nix-desktop;
 
-  extensions = with pkgs.gnomeExtensions; [
-    just-perfection
-    dash-to-dock
-    appindicator
-    blur-my-shell
-  ];
-
   wallpaper = {
     dark = "https://raw.githubusercontent.com/vinceliuice/WhiteSur-wallpapers/main/4k/Monterey.jpg";
     light = "https://raw.githubusercontent.com/vinceliuice/WhiteSur-wallpapers/main/4k/WhiteSur-light.jpg";
@@ -32,10 +25,18 @@ let
 in
 {
   config = mkIf (isEnabled) {
-    environment.systemPackages = with pkgs; extensions ++ [
+    environment.systemPackages = with pkgs; [
       whitesur-icon-theme
       whitesur-gtk-theme
       whitesur-kde
+    ];
+
+    nix-desktop.gnome.extensions = with pkgs.gnomeExtensions; [
+      user-themes
+      just-perfection
+      dash-to-dock
+      appindicator
+      blur-my-shell
     ];
 
     nix-desktop.theme.gtk = {
@@ -77,8 +78,6 @@ in
             apply-custom-theme = true;
             custom-theme-shrink = true;
           };
-
-          "org/gnome/shell".enabled-extensions = map (x: x.extensionUuid) extensions;
         };
       }];
   };
