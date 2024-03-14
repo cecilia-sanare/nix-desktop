@@ -9,8 +9,9 @@ in
   options.nix-desktop.alerts = mkEnableOption "audio alerts";
 
   config = mkIf (cfg.enable) {
-    services.pipewire = mkIf (cfg.audio == "pipewire") {
-      extraConfig.pipewire."99-silent-bell".context.properties."module.x11.bell" = cfg.alerts;
+    # Certain apps (namely firefox) require this to be disabled to turn off alerts
+    services.pipewire.extraConfig.pipewire."99-silent-bell" = mkIf (cfg.audio == "pipewire") {
+      "context.properties"."module.x11.bell" = cfg.alerts;
     };
 
     programs.dconf.profiles.user.databases = [
