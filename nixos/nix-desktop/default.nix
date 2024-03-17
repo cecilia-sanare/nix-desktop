@@ -3,7 +3,7 @@ let
   cfg = config.nix-desktop;
 
   libx = import ../../lib { inherit config pkgs; };
-  inherit (lib) mkEnableOption mkOption mkIf mkMerge types;
+  inherit (lib) mkEnableOption mkOption mkDefault mkIf mkMerge types;
   inherit (types) listOf nullOr;
 in
 {
@@ -28,7 +28,7 @@ in
     hardware.opengl = {
       enable = true;
       driSupport = true;
-      driSupport32Bit = libx.has32BitSupport;
+      driSupport32Bit = mkDefault libx.has32BitSupport;
       extraPackages = with pkgs; [
         (mkIf libx.isAMD amdvlk)
         (mkIf libx.isIntel intel-media-driver)
