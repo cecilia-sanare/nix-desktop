@@ -20,7 +20,7 @@ in
 
     browser = mkOption {
       description = "The default browser to use";
-      type = types.str;
+      type = nullOr (types.str);
       default = null;
     };
 
@@ -59,11 +59,11 @@ in
       xdg.mime = {
         enable = true;
         defaultApplications = mkMerge [
-          (lib.attrsets.genAttrs folderTypes (name: cfg.default-apps.file-manager))
-          (lib.attrsets.genAttrs browserMimeTypes (name: cfg.default-apps.browser))
-          (lib.attrsets.genAttrs videoMimeTypes (name: cfg.default-apps.video-player))
-          (lib.attrsets.genAttrs documentTypes (name: cfg.default-apps.document-viewer))
-          (lib.attrsets.genAttrs textTypes (name: cfg.default-apps.text-editor))
+          (mkIf (cfg.default-apps.file-manager != null) (lib.attrsets.genAttrs folderTypes (name: cfg.default-apps.file-manager)))
+          (mkIf (cfg.default-apps.browser != null) (lib.attrsets.genAttrs browserMimeTypes (name: cfg.default-apps.browser)))
+          (mkIf (cfg.default-apps.video-player != null) (lib.attrsets.genAttrs videoMimeTypes (name: cfg.default-apps.video-player)))
+          (mkIf (cfg.default-apps.document-viewer != null) (lib.attrsets.genAttrs documentTypes (name: cfg.default-apps.document-viewer)))
+          (mkIf (cfg.default-apps.text-editor != null) (lib.attrsets.genAttrs textTypes (name: cfg.default-apps.text-editor)))
         ];
       };
     };
