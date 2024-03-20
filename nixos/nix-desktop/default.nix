@@ -16,6 +16,7 @@ in
     ./audio.nix # settings for 'nix-desktop.audio'
     ./clock.nix # settings for 'nix-desktop.clock'
     ./default-apps.nix # settings for 'nix-desktop.default-apps'
+    ./default-installed-apps.nix # settings for 'nix-desktop.default-installed-apps'
     ./sleep.nix # settings for 'nix-desktop.sleep'
     ./theme.nix # settings for 'nix-desktop.theme'
     ./wallpaper.nix # settings for 'nix-desktop.wallpaper'
