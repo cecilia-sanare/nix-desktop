@@ -24,7 +24,7 @@ in
     }.${cfg.type} or [ ]);
   };
 
-  config = mkIf (cfg.enable && cfg.default-apps != null) {
+  config = mkIf (cfg.enable && cfg.default-installed-apps != null) {
     # Seems redundant to have two terminals
     services.xserver.excludePackages = with pkgs; [ xterm ];
     services.gnome.core-utilities.enable = false;
@@ -33,6 +33,6 @@ in
       gnome-tour
     ];
 
-    environment.systemPackages = cfg.default-apps;
+    environment.systemPackages = cfg.default-installed-apps;
   };
 }
