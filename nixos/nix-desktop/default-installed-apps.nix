@@ -19,6 +19,7 @@ in
         baobab # Disk usage analyzer
         gparted
         gnome.eog # Image Viewer
+        gnome.gnome-calculator
         vlc
       ];
     }.${cfg.type} or [ ]);
